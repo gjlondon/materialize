@@ -30,8 +30,10 @@ mod timestamp;
 mod util;
 
 pub mod session;
+pub mod errors;
 
 pub use crate::cache::CacheConfig;
+pub use crate::errors::CoordinatorError;
 pub use crate::catalog::dump as dump_catalog;
 pub use crate::client::{Client, SessionClient};
 pub use crate::command::{ExecuteResponse, NoSessionExecuteResponse, StartupMessage};

@@ -526,6 +526,7 @@ dependencies = [
  "serde_json",
  "sql",
  "symbiosis",
+ "thiserror",
  "timely",
  "tokio",
  "transform",

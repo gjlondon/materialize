@@ -77,6 +77,7 @@ use crate::session::{PreparedStatement, Session, TransactionStatus};
 use crate::sink_connector;
 use crate::timestamp::{TimestampConfig, TimestampMessage, Timestamper};
 use crate::util::ClientTransmitter;
+use crate::errors::CoordinatorError;
 
 mod arrangement_state;
 
@@ -2168,11 +2169,11 @@ where
                                         .expect("id not found")
                                         .less_equal(&0)
                                 })
+                                .map(|id| {
+                                    id.to_owned() 
+                                })
                                 .collect::<Vec<_>>();
-                            bail!(
-                                "At least one input has no complete timestamps yet: {:?}",
-                                unstarted
-                            );
+                            bail!(CoordinatorError::NoCompleteTimestamps(unstarted));
                         }
                     } else {
                         // A complete trace can be read in its final form with this time.
