@@ -7,18 +7,39 @@
 // the Business Source License, use of this software will be governed
 // by the Apache License, Version 2.0.
 
-//! Per-connection configuration parameters and state.
+//! Errors relevant to the coordinator.
 
 #![forbid(missing_docs)]
 
-use thiserror::Error;
+use std::fmt;
 
 use expr::GlobalId;
 
 /// Errors the coordinator can throw that might be of interest to an end user
-#[derive(Error, Debug)]
 pub enum CoordinatorError {
-    /// The coordinator tried an operation on a source with an input lacking a complete time stamp
-    #[error("At least one input has no complete timestamps yet: {0:?}")]
-    NoCompleteTimestamps(Vec<GlobalId>)
+    /// The tried to establish the latest timestamp and discovered that no timestamps are complete yet
+    NoCompleteTimestamps(Vec<GlobalId>),
+}
+
+impl std::error::Error for CoordinatorError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match &self {
+            CoordinatorError::NoCompleteTimestamps(_) => None,
+        }
+    }
+}
+
+impl fmt::Display for CoordinatorError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str("Coordinator Error: ")?;
+        match &self {
+            CoordinatorError::NoCompleteTimestamps(tried_ids) => write!(f, "(Error Code: 1) At least one input has no complete timestamps yet: {:?}:", tried_ids),
+        }
+    }
+}
+
+impl fmt::Debug for CoordinatorError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        fmt::Display::fmt(self, f)
+    }
 }
