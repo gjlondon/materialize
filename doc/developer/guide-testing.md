@@ -154,6 +154,15 @@ $ brew services start postgresql
 $ createdb $(whoami)  # Yes, this is a shell command, not a SQL command.
 ```
 
+On Ubuntu:
+
+```shell
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo -u postgres createuser --interactive --pwprompt  # create a user with your own username, and set the password to also be your username
+createdb $(whoami)
+```
+
 You might reasonably wonder why PostgreSQL is necessary for running
 sqllogictests against Materialize. The answer is that we offload the hard work
 of mutating queries, like `INSERT INTO ...` and `UPDATE`, to PostgreSQL. We
@@ -161,6 +170,18 @@ slurp up the changelog, much like we would if we were running against a
 Kafka–PostgreSQL [CDC] solution in production, and then run the `SELECT` queries
 against Materialize and verify they match the results specified by the
 sqllogictest file.
+
+To run sqllogictest tests locally, you'll need to start materialize in symbiosis mode:
+
+```shell
+./target/release/materialized --symbiosis postgres://localhost:5432
+```
+
+(This allows sqllogictest to execute queries again materialized, which will directly forward the relevant
+parts of the query execution to postgres).
+
+If the invocations in this section complain about "password missing" or "password authentication failed", add `PGPASSWORD=$(whoami)` as a prefix to
+the commands (or pass whatever password you've set for your user in postgres).
 
 Once PostgreSQL is running, you can run a sqllogictest file like so:
 
