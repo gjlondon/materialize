@@ -368,7 +368,7 @@ fn substitute_vars(msg: &str, vars: &HashMap<String, String>) -> Result<String, 
 ///
 /// Returns the initialized `State` and a cleanup future. The cleanup future
 /// should be `await`ed only *after* dropping the `State` to check whether any
-/// errors occured while dropping the `State`. This awkward API is a workaround
+/// errors occurred while dropping the `State`. This awkward API is a workaround
 /// for the lack of `AsyncDrop` support in Rust.
 pub async fn create_state(
     config: &Config,

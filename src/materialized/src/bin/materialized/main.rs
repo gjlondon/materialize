@@ -15,7 +15,7 @@
 //! draft architecture doc for the most up-to-date plan [0]. Access is limited
 //! to those with access to the Material Dropbox Paper folder.
 //!
-//! [0]: https://paper.dropbox.com/doc/Materialize-architecture-plans--AYSu6vvUu7ZDoOEZl7DNi8UQAg-sZj5rhJmISdZSfK0WBxAl
+//! [0]: https://paper.dropbox.com/doc/Materialize-arlogging-granularitychitecture-plans--AYSu6vvUu7ZDoOEZl7DNi8UQAg-sZj5rhJmISdZSfK0WBxAl
 
 use std::env::VarError;
 use std::ffi::CStr;
